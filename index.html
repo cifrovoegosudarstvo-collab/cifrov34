@@ -1,130 +1,405 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini App Game</title>
-    <!-- Подключаем SDK Telegram для интеграции с мессенджером -->
-    <script src="https://telegram.org"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101827">
+    <title>Моё приложение</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --bg: #101827;
+            --panel: #192538;
+            --panel-hover: #22334b;
+            --text: #f2f5fa;
+            --muted: #9aa9bd;
+            --accent: #69a7ff;
+            --border: #2b3a50;
+        }
+
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            user-select: none;
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
         }
 
-        /* Контейнер для страниц */
-        .page {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .app {
             width: 100%;
-            height: 100%;
+            max-width: 620px;
+            min-height: 100vh;
+            margin: auto;
+            padding: 26px 20px 36px;
+            padding-bottom: calc(36px + env(safe-area-inset-bottom));
+        }
+
+        .topline {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform: scale(0.95);
+            margin-bottom: 38px;
         }
 
-        /* Класс для активной страницы */
-        .page.active {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1);
+        .brand {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-transform: uppercase;
         }
 
-        /* Стилизация заголовков */
-        h1 {
-            font-size: 28px;
+        .counter {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
         }
 
-        /* Стильная кнопка */
-        .btn {
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #ffffff;
-            background: linear-gradient(135deg, #2488ff, #0057b8);
-            border: none;
-            border-radius: 16px;
+        h1 {
+            font-size: clamp(29px, 7vw, 42px);
+            line-height: 1.12;
+            letter-spacing: -1.3px;
+            margin: 0 0 16px;
+            overflow-wrap: anywhere;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.75;
+            color: var(--muted);
+            white-space: pre-line;
+        }
+
+        .welcome {
+            padding: 28px 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 26px 0;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .menu-button {
+            position: relative;
+            min-height: 130px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: var(--panel);
+            color: var(--text);
+            text-align: left;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 87, 184, 0.4);
-            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            transition: background .18s, transform .18s;
         }
 
-        /* Эффект нажатия */
-        .btn:active {
-            transform: scale(0.96);
-            box-shadow: 0 2px 8px rgba(0, 87, 184, 0.2);
+        .menu-button:active {
+            transform: scale(.98);
         }
 
-        /* Красная кнопка для возврата назад */
-        .btn-back {
-            background: linear-gradient(135deg, #ff4d4d, #c40000);
-            box-shadow: 0 4px 15px rgba(196, 0, 0, 0.4);
+        .menu-button:hover {
+            background: var(--panel-hover);
         }
 
-        .btn-back:active {
-            box-shadow: 0 2px 8px rgba(196, 0, 0, 0.2);
+        .number {
+            display: block;
+            font-size: 12px;
+            color: var(--accent);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .button-title {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 17px;
+            right: 16px;
+            color: var(--muted);
+        }
+
+        .action {
+            width: 100%;
+            min-height: 54px;
+            border: 0;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #101827;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 28px;
+        }
+
+        .action:active {
+            opacity: .85;
+        }
+
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 11px 15px;
+            color: var(--text);
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 28px;
+        }
+
+        .page-content {
+            margin-top: 28px;
+            padding: 20px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            line-height: 1.7;
+            color: var(--muted);
+            white-space: pre-line;
+        }
+
+        @media (max-width: 360px) {
+            .app {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .menu-button {
+                padding: 14px;
+                min-height: 118px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
         }
     </style>
 </head>
+
 <body>
-
-    <!-- ПЕРВАЯ СТРАНИЦА -->
-    <div id="page1" class="page active">
-        <h1>Главный экран</h1>
-        <button class="btn" onclick="navigateTo('page2')">Вперед</button>
-    </div>
-
-    <!-- ВТОРАЯ СТРАНИЦА -->
-    <div id="page2" class="page">
-        <h1>Второй экран</h1>
-        <button class="btn btn-back" onclick="navigateTo('page1')">Назад</button>
-    </div>
+    <main class="app">
+        <div class="topline">
+            <div class="brand" id="brand">PROJECT / 01</div>
+            <div class="counter" id="counter">WELCOME</div>
+        </div>
+        <section id="screen"></section>
+    </main>
 
     <script>
-        // Инициализируем Telegram WebApp
         const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand(); // Разворачиваем приложение на весь экран телефона
+        tg?.ready();
+        tg?.expand();
+
+        // Редактируй тексты и названия здесь.
+        const config = {
+            brand: "PROJECT / 01",
+
+            welcome: {
+                title: "Добро пожаловать",
+                text: "Добро пожаловать в наше приложение.\n\nЗдесь собраны основные разделы и инструменты для работы."
+            },
+
+            menu: [
+                { title: "Раздел первый", text: "Основное направление" },
+                { title: "Раздел второй", text: "Информация и материалы" },
+                { title: "Раздел третий", text: "Аналитика и показатели" },
+                { title: "Раздел четвёртый", text: "Дополнительные функции" }
+            ],
+
+            submenus: [
+                [
+                    { title: "Подраздел 1.1", text: "Материалы первого подраздела." },
+                    { title: "Подраздел 1.2", text: "Материалы второго подраздела." },
+                    { title: "Подраздел 1.3", text: "Материалы третьего подраздела." },
+                    { title: "Подраздел 1.4", text: "Материалы четвёртого подраздела." }
+                ],
+                [
+                    { title: "Подраздел 2.1", text: "Информация подраздела." },
+                    { title: "Подраздел 2.2", text: "Информация подраздела." },
+                    { title: "Подраздел 2.3", text: "Информация подраздела." },
+                    { title: "Подраздел 2.4", text: "Информация подраздела." }
+                ],
+                [
+                    { title: "Подраздел 3.1", text: "Данные подраздела." },
+                    { title: "Подраздел 3.2", text: "Данные подраздела." },
+                    { title: "Подраздел 3.3", text: "Данные подраздела." },
+                    { title: "Подраздел 3.4", text: "Данные подраздела." }
+                ],
+                [
+                    { title: "Подраздел 4.1", text: "Дополнительные материалы." },
+                    { title: "Подраздел 4.2", text: "Дополнительные материалы." },
+                    { title: "Подраздел 4.3", text: "Дополнительные материалы." },
+                    { title: "Подраздел 4.4", text: "Дополнительные материалы." }
+                ]
+            ]
+        };
+
+        let current = { type: "welcome" };
+        const history = [];
+        const screen = document.getElementById("screen");
+        const counter = document.getElementById("counter");
+
+        document.getElementById("brand").textContent = config.brand;
+
+        function escapeHTML(value) {
+            return String(value).replace(/[&<>"']/g, char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[char]);
         }
 
-        // Функция переключения страниц
-        function navigateTo(pageId) {
-            // Скрываем все страницы
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
+        function navigate(next) {
+            history.push(current);
+            current = next;
+            render();
+        }
+
+        function back() {
+            if (!history.length) return;
+            current = history.pop();
+            render();
+        }
+
+        function button(item, index, level) {
+            return `
+        <button class="menu-button"
+          data-index="${index}" data-level="${level}">
+          <span class="number">${String(index + 1).padStart(2, "0")}</span>
+          <span class="button-title">${escapeHTML(item.title)}</span>
+          <span class="arrow">↗</span>
+        </button>`;
+        }
+
+        function render() {
+            const isWelcome = current.type === "welcome";
+            const isMenu = current.type === "menu";
+            const isSubmenu = current.type === "submenu";
+            const isDetail = current.type === "detail";
+
+            counter.textContent = isWelcome ? "WELCOME"
+                : isMenu ? "MAIN MENU"
+                    : isSubmenu ? "SECTION " + (current.section + 1)
+                        : "INFORMATION";
+
+            let html = "";
+
+            if (!isWelcome && !isMenu) {
+                html += `<button class="back" id="back">← Назад</button>`;
+            }
+
+            if (isWelcome) {
+                html += `
+          <div class="welcome">
+            <div class="eyebrow">Добро пожаловать</div>
+            <h1>${escapeHTML(config.welcome.title)}</h1>
+            <div class="divider"></div>
+            <div class="description">${escapeHTML(config.welcome.text)}</div>
+            <button class="action" id="next">Далее →</button>
+          </div>`;
+            }
+
+            if (isMenu) {
+                html += `
+          <div class="eyebrow">Рабочее пространство</div>
+          <h1>Главное меню</h1>
+          <div class="description">Выберите нужное направление.</div>
+          <div class="menu">
+            ${config.menu.map((item, i) => button(item, i, "main")).join("")}
+          </div>`;
+            }
+
+            if (isSubmenu) {
+                const section = config.menu[current.section];
+                html += `
+          <div class="eyebrow">Раздел ${current.section + 1}</div>
+          <h1>${escapeHTML(section.title)}</h1>
+          <div class="description">${escapeHTML(section.text)}</div>
+          <div class="menu">
+            ${config.submenus[current.section]
+                        .map((item, i) => button(item, i, "sub")).join("")}
+          </div>`;
+            }
+
+            if (isDetail) {
+                html += `
+          <div class="eyebrow">Информационная страница</div>
+          <h1>${escapeHTML(current.item.title)}</h1>
+          <div class="page-content">${escapeHTML(current.item.text)}</div>`;
+            }
+
+            screen.innerHTML = html;
+
+            document.getElementById("next")?.addEventListener("click", () => {
+                navigate({ type: "menu" });
             });
 
-            // Показываем нужную страницу
-            document.getElementById(pageId).classList.add('active');
+            document.getElementById("back")?.addEventListener("click", back);
 
-            // Добавляем легкую вибрацию на смартфонах при клике
-            if (tg?.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
+            screen.querySelectorAll(".menu-button").forEach(el => {
+                el.addEventListener("click", () => {
+                    const index = Number(el.dataset.index);
+
+                    if (el.dataset.level === "main") {
+                        navigate({ type: "submenu", section: index });
+                    } else {
+                        navigate({
+                            type: "detail",
+                            section: current.section,
+                            item: config.submenus[current.section][index]
+                        });
+                    }
+                });
+            });
+
+            if (tg?.BackButton) {
+                if (isWelcome || isMenu) {
+                    tg.BackButton.hide();
+                } else {
+                    tg.BackButton.show();
+                }
             }
         }
+
+        tg?.BackButton?.onClick(back);
+
+        render();
     </script>
 </body>
+
 </html>
