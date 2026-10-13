@@ -1,255 +1,473 @@
-:root {
---bg: #f3f6fc;
---panel: #ffffff;
---panel-hover: #edf2ff;
---text: #17213a;
---muted: #64718a;
---accent: #635bff;
---border: #e1e7f2;
-}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101827" />
+    <title>Моё приложение</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      :root {
+        --bg: #f3f6fc;
+        --panel: #ffffff;
+        --panel-hover: #edf2ff;
+        --text: #17213a;
+        --muted: #64718a;
+        --accent: #635bff;
+        --border: #e1e7f2;
+      }
 
-* {
-box-sizing: border-box;
-}
+      * {
+        box-sizing: border-box;
+      }
 
-body {
-margin: 0;
-min-height: 100vh;
-background: var(--bg);
-color: var(--text);
-font-family: Inter, -apple-system, BlinkMacSystemFont,
-"Segoe UI", sans-serif;
-}
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
 
-.app {
-width: 100%;
-max-width: 680px;
-min-height: 100vh;
-margin: auto;
-padding: 24px 18px 40px;
-padding-bottom: calc(40px + env(safe-area-inset-bottom));
-}
+      .app {
+        width: 100%;
+        max-width: 680px;
+        min-height: 100vh;
+        margin: auto;
+        padding: 24px 18px 40px;
+        padding-bottom: calc(40px + env(safe-area-inset-bottom));
+      }
 
-.topline {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-bottom: 32px;
-}
+      .topline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+      }
 
-.brand {
-font-size: 13px;
-font-weight: 900;
-letter-spacing: 1.5px;
-color: var(--accent);
-}
+      .brand {
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 1.5px;
+        color: var(--accent);
+      }
 
-.counter {
-background: #e8eaff;
-color: #5148e5;
-padding: 8px 12px;
-border-radius: 999px;
-font-size: 11px;
-font-weight: 800;
-}
+      .counter {
+        background: #e8eaff;
+        color: #5148e5;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 800;
+      }
 
-.eyebrow {
-font-size: 12px;
-font-weight: 800;
-letter-spacing: 1px;
-color: #635bff;
-text-transform: uppercase;
-margin-bottom: 12px;
-}
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #635bff;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
 
-h1 {
-font-size: clamp(32px, 8vw, 46px);
-line-height: 1.08;
-letter-spacing: -1.5px;
-margin: 0 0 18px;
-overflow-wrap: anywhere;
-}
+      h1 {
+        font-size: clamp(32px, 8vw, 46px);
+        line-height: 1.08;
+        letter-spacing: -1.5px;
+        margin: 0 0 18px;
+        overflow-wrap: anywhere;
+      }
 
-.description {
-font-size: 16px;
-line-height: 1.7;
-color: var(--muted);
-white-space: pre-line;
-}
+      .description {
+        font-size: 16px;
+        line-height: 1.7;
+        color: var(--muted);
+        white-space: pre-line;
+      }
 
-.welcome {
-padding: 24px 0;
-}
+      .welcome {
+        padding: 24px 0;
+      }
 
-.divider {
-height: 3px;
-width: 64px;
-background: #ffbd59;
-margin: 24px 0;
-border-radius: 3px;
-}
+      .divider {
+        height: 3px;
+        width: 64px;
+        background: #ffbd59;
+        margin: 24px 0;
+        border-radius: 3px;
+      }
 
-.menu {
-display: grid;
-grid-template-columns: repeat(2, minmax(0, 1fr));
-gap: 14px;
-margin-top: 28px;
-}
+      .menu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 28px;
+      }
 
-.menu-button {
-position: relative;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-gap: 18px;
-min-height: 150px;
-padding: 20px;
-border: none;
-border-radius: 18px;
-background: var(--panel);
-color: var(--text);
-text-align: left;
-cursor: pointer;
-box-shadow: 0 5px 18px rgba(40, 55, 100, .055);
-transition: transform .15s, background .15s;
-}
+      .menu-button {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 150px;
+        padding: 20px;
+        border: none;
+        border-radius: 18px;
+        background: var(--panel);
+        color: var(--text);
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 5px 18px rgba(40, 55, 100, 0.055);
+        transition: transform 0.15s, background 0.15s;
+      }
 
-.menu-button:nth-child(4n + 1) {
-border-bottom: 5px solid #635bff;
-}
+      .menu-button:nth-child(4n + 1) {
+        border-bottom: 5px solid #635bff;
+      }
 
-.menu-button:nth-child(4n + 2) {
-border-bottom: 5px solid #21bfa6;
-}
+      .menu-button:nth-child(4n + 2) {
+        border-bottom: 5px solid #21bfa6;
+      }
 
-.menu-button:nth-child(4n + 3) {
-border-bottom: 5px solid #ffad43;
-}
+      .menu-button:nth-child(4n + 3) {
+        border-bottom: 5px solid #ffad43;
+      }
 
-.menu-button:nth-child(4n) {
-border-bottom: 5px solid #ff6b8a;
-}
+      .menu-button:nth-child(4n) {
+        border-bottom: 5px solid #ff6b8a;
+      }
 
-.menu-button:active {
-transform: scale(.97);
-}
+      .menu-button:active {
+        transform: scale(0.97);
+      }
 
-.menu-button:hover {
-background: var(--panel-hover);
-}
+      .menu-button:hover {
+        background: var(--panel-hover);
+      }
 
-.number {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-width: 38px;
-height: 38px;
-border-radius: 12px;
-background: #ecebff;
-color: #635bff;
-font-size: 13px;
-font-weight: 900;
-}
+      .number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: #ecebff;
+        color: #635bff;
+        font-size: 13px;
+        font-weight: 900;
+      }
 
-.menu-button:nth-child(4n + 2) .number {
-background: #dcf8f1;
-color: #078b75;
-}
+      .menu-button:nth-child(4n + 2) .number {
+        background: #dcf8f1;
+        color: #078b75;
+      }
 
-.menu-button:nth-child(4n + 3) .number {
-background: #fff0d8;
-color: #c47a12;
-}
+      .menu-button:nth-child(4n + 3) .number {
+        background: #fff0d8;
+        color: #c47a12;
+      }
 
-.menu-button:nth-child(4n) .number {
-background: #ffe5ec;
-color: #dc4266;
-}
+      .menu-button:nth-child(4n) .number {
+        background: #ffe5ec;
+        color: #dc4266;
+      }
 
-.button-title {
-display: block;
-padding-right: 10px;
-font-size: 16px;
-font-weight: 800;
-line-height: 1.4;
-}
+      .button-title {
+        display: block;
+        padding-right: 10px;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1.4;
+      }
 
-.arrow {
-position: absolute;
-right: 18px;
-bottom: 19px;
-color: #929bb0;
-font-size: 18px;
-}
+      .arrow {
+        position: absolute;
+        right: 18px;
+        bottom: 19px;
+        color: #929bb0;
+        font-size: 18px;
+      }
 
-.action {
-width: 100%;
-min-height: 58px;
-margin-top: 30px;
-padding: 16px;
-border: none;
-border-radius: 15px;
-background: #635bff;
-color: white;
-font-size: 16px;
-font-weight: 800;
-cursor: pointer;
-box-shadow: 0 7px 18px rgba(99, 91, 255, .22);
-}
+      .action {
+        width: 100%;
+        min-height: 58px;
+        margin-top: 30px;
+        padding: 16px;
+        border: none;
+        border-radius: 15px;
+        background: #635bff;
+        color: white;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 7px 18px rgba(99, 91, 255, 0.22);
+      }
 
-.action:active {
-transform: scale(.985);
-}
+      .action:active {
+        transform: scale(0.985);
+      }
 
-.back {
-display: inline-flex;
-align-items: center;
-gap: 8px;
-margin-bottom: 28px;
-padding: 12px 17px;
-background: #ffffff;
-border: 1px solid var(--border);
-border-radius: 12px;
-color: var(--text);
-font-size: 14px;
-font-weight: 700;
-cursor: pointer;
-}
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 28px;
+        padding: 12px 17px;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
 
-.page-content {
-margin-top: 28px;
-padding: 24px;
-background: #ffffff;
-border-radius: 18px;
-border: 1px solid var(--border);
-line-height: 1.8;
-color: var(--muted);
-white-space: pre-line;
-box-shadow: 0 5px 18px rgba(40, 55, 100, .04);
-}
+      .page-content {
+        margin-top: 28px;
+        padding: 24px;
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        line-height: 1.8;
+        color: var(--muted);
+        white-space: pre-line;
+        box-shadow: 0 5px 18px rgba(40, 55, 100, 0.04);
+      }
 
-@media (max-width: 360px) {
-.app {
-padding-left: 14px;
-padding-right: 14px;
-}
+      @media (max-width: 360px) {
+        .app {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
 
-.menu {
-gap: 10px;
-}
+        .menu {
+          gap: 10px;
+        }
 
-.menu-button {
-min-height: 135px;
-padding: 14px;
-}
+        .menu-button {
+          min-height: 135px;
+          padding: 14px;
+        }
 
-.button-title {
-font-size: 14px;
-}
-}
+        .button-title {
+          font-size: 14px;
+        }
+      }
 
-@media (prefers-reduced-motion: reduce) {
-*, *::before, *::after {
-transition: none !important;
-}
-}
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="app">
+      <div class="topline">
+        <div class="brand" id="brand">PROJECT / 01</div>
+        <div class="counter" id="counter">WELCOME</div>
+      </div>
+      <section id="screen"></section>
+    </main>
+
+    <script>
+      const tg = window.Telegram?.WebApp;
+      tg?.ready();
+      tg?.expand();
+
+      // Редактируй тексты и названия здесь.
+      const config = {
+        brand: "PROJECT / 01",
+
+        welcome: {
+          title: "Добро пожаловать",
+          text: "Добро пожаловать в наше приложение.\n\nЗдесь собраны основные разделы и инструменты для работы.",
+        },
+
+        menu: [
+          { title: "Раздел первый", text: "Основное направление" },
+          { title: "Раздел второй", text: "Информация и материалы" },
+          { title: "Раздел третий", text: "Аналитика и показатели" },
+          { title: "Раздел четвёртый", text: "Дополнительные функции" },
+        ],
+
+        submenus: [
+          [
+            { title: "Подраздел 1.1", text: "Материалы первого подраздела." },
+            { title: "Подраздел 1.2", text: "Материалы второго подраздела." },
+            { title: "Подраздел 1.3", text: "Материалы третьего подраздела." },
+            {
+              title: "Подраздел 1.4",
+              text: "Материалы четвёртого подраздела.",
+            },
+          ],
+          [
+            { title: "Подраздел 2.1", text: "Информация подраздела." },
+            { title: "Подраздел 2.2", text: "Информация подраздела." },
+            { title: "Подраздел 2.3", text: "Информация подраздела." },
+            { title: "Подраздел 2.4", text: "Информация подраздела." },
+          ],
+          [
+            { title: "Подраздел 3.1", text: "Данные подраздела." },
+            { title: "Подраздел 3.2", text: "Данные подраздела." },
+            { title: "Подраздел 3.3", text: "Данные подраздела." },
+            { title: "Подраздел 3.4", text: "Данные подраздела." },
+          ],
+          [
+            { title: "Подраздел 4.1", text: "Дополнительные материалы." },
+            { title: "Подраздел 4.2", text: "Дополнительные материалы." },
+            { title: "Подраздел 4.3", text: "Дополнительные материалы." },
+            { title: "Подраздел 4.4", text: "Дополнительные материалы." },
+          ],
+        ],
+      };
+
+      let current = { type: "welcome" };
+      const history = [];
+      const screen = document.getElementById("screen");
+      const counter = document.getElementById("counter");
+
+      document.getElementById("brand").textContent = config.brand;
+
+      function escapeHTML(value) {
+        return String(value).replace(
+          /[&<>"']/g,
+          (char) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[char])
+        );
+      }
+
+      function navigate(next) {
+        history.push(current);
+        current = next;
+        render();
+      }
+
+      function back() {
+        if (!history.length) return;
+        current = history.pop();
+        render();
+      }
+
+      function button(item, index, level) {
+        return `
+        <button class="menu-button"
+          data-index="${index}" data-level="${level}">
+          <span class="number">${String(index + 1).padStart(2, "0")}</span>
+          <span class="button-title">${escapeHTML(item.title)}</span>
+          <span class="arrow">↗</span>
+        </button>`;
+      }
+
+      function render() {
+        const isWelcome = current.type === "welcome";
+        const isMenu = current.type === "menu";
+        const isSubmenu = current.type === "submenu";
+        const isDetail = current.type === "detail";
+
+        counter.textContent = isWelcome
+          ? "WELCOME"
+          : isMenu
+          ? "MAIN MENU"
+          : isSubmenu
+          ? "SECTION " + (current.section + 1)
+          : "INFORMATION";
+
+        let html = "";
+
+        if (!isWelcome && !isMenu) {
+          html += `<button class="back" id="back">← Назад</button>`;
+        }
+
+        if (isWelcome) {
+          html += `
+          <div class="welcome">
+            <div class="eyebrow">Добро пожаловать</div>
+            <h1>${escapeHTML(config.welcome.title)}</h1>
+            <div class="divider"></div>
+            <div class="description">${escapeHTML(config.welcome.text)}</div>
+            <button class="action" id="next">Далее →</button>
+          </div>`;
+        }
+
+        if (isMenu) {
+          html += `
+          <div class="eyebrow">Рабочее пространство</div>
+          <h1>Главное меню</h1>
+          <div class="description">Выберите нужное направление.</div>
+          <div class="menu">
+            ${config.menu.map((item, i) => button(item, i, "main")).join("")}
+          </div>`;
+        }
+
+        if (isSubmenu) {
+          const section = config.menu[current.section];
+          html += `
+          <div class="eyebrow">Раздел ${current.section + 1}</div>
+          <h1>${escapeHTML(section.title)}</h1>
+          <div class="description">${escapeHTML(section.text)}</div>
+          <div class="menu">
+            ${config.submenus[current.section]
+              .map((item, i) => button(item, i, "sub"))
+              .join("")}
+          </div>`;
+        }
+
+        if (isDetail) {
+          html += `
+          <div class="eyebrow">Информационная страница</div>
+          <h1>${escapeHTML(current.item.title)}</h1>
+          <div class="page-content">${escapeHTML(current.item.text)}</div>`;
+        }
+
+        screen.innerHTML = html;
+
+        document.getElementById("next")?.addEventListener("click", () => {
+          navigate({ type: "menu" });
+        });
+
+        document.getElementById("back")?.addEventListener("click", back);
+
+        screen.querySelectorAll(".menu-button").forEach((el) => {
+          el.addEventListener("click", () => {
+            const index = Number(el.dataset.index);
+
+            if (el.dataset.level === "main") {
+              navigate({ type: "submenu", section: index });
+            } else {
+              navigate({
+                type: "detail",
+                section: current.section,
+                item: config.submenus[current.section][index],
+              });
+            }
+          });
+        });
+
+        if (tg?.BackButton) {
+          if (isWelcome || isMenu) {
+            tg.BackButton.hide();
+          } else {
+            tg.BackButton.show();
+          }
+        }
+      }
+
+      tg?.BackButton?.onClick(back);
+
+      render();
+    </script>
+  </body>
+</html>
