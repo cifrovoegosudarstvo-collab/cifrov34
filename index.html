@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>Цифровое государство — версия 0.5.3 (локальный тест)</title>
+  <title>Цифровое государство — версия 0.7 (локальный тест)</title>
   <style>
     :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#f0f6ff;background:#030b17;--line:#254c80;--muted:#9bb4d3;--bright:#59baff;--focus:#7bbcff}
     *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -5%,#0c3c67 0,transparent 46%),linear-gradient(#07192d,#030a16 90%)}
@@ -39,14 +39,41 @@
     .sex-wrap{margin-top:18px}.sex-toggle{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-width:245px;background:#061427;border:1px solid #254e80;border-radius:12px;padding:5px}
     .sex-toggle button{background:transparent;color:#a9c4df;border:0;border-radius:8px;min-height:38px;font-size:14px;font-weight:800}
     .sex-toggle button[aria-pressed="true"]{background:linear-gradient(115deg,#3543b7,#0f6fc9);color:white;box-shadow:0 4px 12px #0005}
-    footer{margin-top:15px;text-align:center;font-size:11px;color:#6588ad}
+    .auth-label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px;color:#dbefff}.auth-input{width:100%;min-height:46px;border:1px solid #34669d;border-radius:10px;background:#061327;padding:10px 13px;color:#fff;font-size:16px}.auth-input:focus{outline:2px solid #70c5ff}.auth-box{margin-top:14px}.auth-status{margin-top:14px}.authenticated-panel{margin-top:10px}footer{margin-top:15px;text-align:center;font-size:11px;color:#6588ad}
     @media(max-width:390px){.shell{padding-left:12px;padding-right:12px}.panel{padding:15px 11px}.fields{gap:10px}.digit{width:25px;height:40px}.digits.birth-preview .digit{width:20px}.password-group .digit{width:39px}}
     @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+    /* v0.7 — универсальная справка и экран приветствия */
+    .brand-bar .brand-title{min-width:0;flex:1}
+    .help-trigger{width:37px;height:37px;flex:0 0 auto;border:1.5px solid #58a7ec;border-radius:50%;background:#0a3157;color:#e5f5ff;font-size:21px;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 3px #12355840}
+    .help-trigger:hover{background:#14518a}
+    .help-dialog{width:min(92vw,500px);max-height:88vh;overflow:auto;background:linear-gradient(145deg,#0c2644,#071527);color:#f0f7ff;border:1px solid #4c88c8;border-radius:20px;padding:21px;box-shadow:0 28px 90px #000c}
+    .help-dialog::backdrop{background:#010813d9}
+    .help-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .help-top h2{margin:0;font-size:20px}.help-close{width:36px;height:36px;flex:0 0 auto;border:1px solid #4a7eae;border-radius:11px;color:#fff;background:#13365c;font-size:24px}
+    .help-heading{font-size:12px;color:#64c8ff;text-transform:uppercase;letter-spacing:.06em;font-weight:750;margin:18px 0 6px}
+    .help-value{font-size:14px;line-height:1.65;margin:0;color:#d6e8f9}
+    .help-video-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+    .help-video-buttons button{min-height:45px;border:1px dashed #3b6a98;border-radius:10px;background:#132a44;color:#98b3d0;font-size:12px}
+    .help-video-buttons button:disabled{opacity:.8;cursor:not-allowed}
+    .greet-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 18px}
+    .greet-switch button{border:1px solid #285887;border-radius:11px;background:#0a1c35;color:#a6c3e7;min-height:46px;font-weight:750;font-size:13px}
+    .greet-switch button[aria-pressed="true"]{background:linear-gradient(115deg,#503bca,#116eaf);border-color:#4c9fff;color:#fff}
+    .greet-card{text-align:center}
+    .greet-circle{width:min(100%,310px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;margin:12px auto 14px;padding:24px;background:radial-gradient(circle at 35% 22%,#143d6b,#06182d 72%);border:3px solid #3b94ee;box-shadow:0 0 0 5px #0b2b4d,0 0 38px #206bb445,inset 0 0 28px #12549b35}
+    .greet-qr-image{width:100%;height:auto;display:block;aspect-ratio:1;object-fit:contain;border-radius:12px;background:#fff;padding:5px;image-rendering:auto}
+    .greet-hint{font-size:12px;line-height:1.5;color:#adcbe8;margin:8px auto 14px;max-width:315px}
+    .greet-camera-shell{border:2px solid #2779bd;border-radius:19px;aspect-ratio:1;max-width:320px;margin:12px auto 14px;position:relative;overflow:hidden;background:radial-gradient(circle at center,#0a355a,#04101c 70%);display:grid;place-items:center}
+    .greet-camera-mark{width:66%;height:66%;border:3px dashed #68bfff;border-radius:18px;display:grid;place-items:center;color:#91d7ff}
+    .greet-camera-mark .scan-glyph{font-size:58px;line-height:1}.greet-camera-mark p{font-size:12px;margin:0 12px 10px}
+    #greet-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .greet-result{margin-top:13px}.greet-warning{color:#a8c7df;font-size:12px;line-height:1.6}
+    @media(max-width:360px){.help-video-buttons{grid-template-columns:1fr}.greet-circle{padding:19px}}
   </style>
 </head>
 <body>
 <div class="shell">
-  <header class="brand-bar"><div class="planet" aria-hidden="true">🌍</div><div><div class="brand-name">Цифровое государство</div><div class="brand-note">Мы — одно сообщество планеты Земля</div></div></header>
+  <header class="brand-bar"><div class="planet" aria-hidden="true">🌍</div><div class="brand-title"><div class="brand-name">Цифровое государство</div><div class="brand-note">Мы — одно сообщество планеты Земля</div></div><button id="help-open" class="help-trigger" type="button" title="Помощь по текущей странице" aria-label="Помощь по текущей странице">?</button></header>
   <main>
     <!-- ЭКРАН 0: КНЗД не предусмотрена -->
     <section class="screen active" id="screen-0" aria-label="Приветственная страница">
@@ -62,7 +89,7 @@
       <div class="notice menu-success" id="menu-registration-notice" role="status" aria-live="polite" hidden>
         <div class="menu-success-heading"><strong>✓ Регистрация прошла успешно!</strong><button type="button" class="menu-success-close" id="dismiss-registration-notice" aria-label="Закрыть уведомление">×</button></div>
         <div>Твой ID: <span id="menu-registered-id" class="menu-success-id"></span></div>
-        <div>Аккаунт создан в C1. Вход в аккаунт пока разрабатывается.</div>
+        <div>Аккаунт создан в C1. Теперь можно попробовать войти на экране 1.2.</div>
       </div>
       <div class="panel"><div class="menu">
         <button class="btn" type="button" data-open="1-1">Проверка результатов ↗</button>
@@ -77,8 +104,66 @@
     </section>
     <section class="screen" id="screen-1-2" aria-label="Вход">
       <div class="overline">ЭКРАН 1.2</div><h1>Вход в аккаунт</h1>
-      <div class="panel"><span class="tag">В разработке</span><p class="caption" style="margin-top:12px">Безопасный вход по ID и паролю подключим после настройки серверной авторизации.</p></div>
+      <p class="lead">Войди по своему 16-значному ID и четырёхсимвольному паролю. Пока это закрытый локальный тест.</p>
+      <form id="login-form" class="panel" novalidate>
+        <span class="tag">Проверка входа через C1</span>
+        <label class="auth-label" for="login-id">ID участника (16 цифр)</label>
+        <input id="login-id" class="auth-input" inputmode="numeric" autocomplete="off" maxlength="16" placeholder="Например: 2001040713152642" required>
+        <label class="auth-label" for="login-password">Пароль (4 символа)</label>
+        <input id="login-password" class="auth-input" type="password" maxlength="4" autocomplete="off" placeholder="Латиница и цифры" required>
+        <p class="notes">Большие и маленькие буквы не различаются. После нескольких неудачных попыток вход временно ограничивается.</p>
+        <div class="menu"><button id="login-submit" type="submit" class="btn primary">Войти</button></div>
+        <div id="login-result" role="status" aria-live="polite" class="notice result"></div>
+      </form>
       <div class="flex-fill"></div><button class="btn-back" type="button" data-back="1">← Назад</button>
+    </section>
+    <section class="screen" id="screen-1-2-1" aria-label="Главное меню после входа">
+      <div class="overline">ЭКРАН 1.2.1</div><h1>Главное меню</h1>
+      <p class="lead">Вход подтверждён сервером. Это локальная проверка аккаунта.</p>
+      <div class="panel authenticated-panel">
+        <span class="tag">Тестовый сеанс · 30 минут</span>
+        <p class="caption auth-status" id="account-id-text"></p>
+        <div class="menu">
+          <button class="btn" type="button" data-open="1-2-1-1">Поздороваться</button>
+          <button class="btn" type="button" data-main-placeholder="Группы">Группы</button>
+          <button class="btn" type="button" data-main-placeholder="Уровень общей верификации">Уровень общей верификации</button>
+          <button class="btn" type="button" data-main-placeholder="Забастовки">Забастовки</button>
+        </div>
+        <div class="notice result" id="main-placeholder-result" role="status" aria-live="polite"></div>
+      </div>
+      <div class="flex-fill"></div>
+      <button class="btn-back" type="button" id="logout-test">Выйти (тест)</button>
+    </section>
+    <!-- ЭКРАН 1.2.1.1: визуальный прототип приветствия; нет записи в базу -->
+    <section class="screen" id="screen-1-2-1-1" aria-label="Поздороваться">
+      <div class="overline">ЭКРАН 1.2.1.1</div>
+      <h1>Поздороваться</h1>
+      <p class="lead">При встрече покажи свой QR-код или сканируй код другого участника.</p>
+      <div class="panel">
+        <span class="tag">Демонстрация · без верификации</span>
+        <div class="greet-switch" role="group" aria-label="Способ приветствия">
+          <button type="button" id="greet-choose-qr" aria-pressed="false">◎ Мой QR-код</button>
+          <button type="button" id="greet-choose-scan" aria-pressed="false">▣ Сканер</button>
+        </div>
+        <div class="greet-card" id="greet-qr-mode" hidden>
+          <h2 class="panel-title">Покажи мой QR-код</h2>
+          <div class="greet-circle"><img id="greet-qr-img" class="greet-qr-image" src="data:image/png;base64,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" alt="Считываемый демонстрационный QR-код без персональных данных" width="300" height="300"></div>
+          <p class="greet-hint">Оформлен в круге, как в твоём примере. Внутри — обычный считываемый QR-код.</p>
+          <p class="notes">Этот код одинаков для демонстрации. Он НЕ содержит ID и не подтверждает приветствие.</p>
+        </div>
+        <div class="greet-card" id="greet-scan-mode" hidden>
+          <h2 class="panel-title">Сканировать QR-код</h2>
+          <div class="greet-camera-shell">
+            <div class="greet-camera-mark" id="greet-camera-mark" aria-hidden="true"><span class="scan-glyph">⌗</span><p>Наведи камеру на QR-код</p></div>
+            <video id="greet-video" autoplay muted playsinline hidden aria-label="Изображение с камеры"></video>
+          </div>
+          <button class="btn primary" id="greet-start-scan" type="button">Включить сканер</button>
+          <p class="greet-hint">При запуске камера может запросить разрешение. В Telegram используем встроенный сканер, если он доступен.</p>
+        </div>
+        <div class="notice greet-warning">Режим выбирается случайно при каждом входе: 50/50. Его всегда можно переключить. Реальное приветствие между аккаунтами добавим позже.</div>
+        <div class="notice result greet-result" id="greet-result" role="status" aria-live="polite"></div>
+      </div>
+      <div class="flex-fill"></div><button class="btn-back" type="button" data-back="1-2-1">← Назад</button>
     </section>
     <!-- ЭКРАН 1.3: отдельная клетка на каждый символ, автопереход -->
     <section class="screen" id="screen-1-3" aria-label="Регистрация">
@@ -105,8 +190,17 @@
       <div class="flex-fill"></div><button class="btn-back" type="button" data-back="1">← Назад</button>
     </section>
   </main>
-  <footer>Цифровое государство · версия 0.5.3 · только локальный тест</footer>
+  <footer>Цифровое государство · версия 0.7 · только локальный тест</footer>
 </div>
+<dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title">
+  <div class="help-top"><h2 id="help-title">Справка</h2><button id="help-close" class="help-close" aria-label="Закрыть справку" type="button">×</button></div>
+  <p class="help-heading">Что это за страница?</p><p class="help-value" id="help-purpose"></p>
+  <p class="help-heading">Как пользоваться?</p><p class="help-value" id="help-how"></p>
+  <p class="help-heading">Что будет дальше?</p><p class="help-value" id="help-next"></p>
+  <p class="help-heading">Видео и мультики-инструкции</p>
+  <div class="help-video-buttons"><button type="button" disabled>▶ TikTok — скоро</button><button type="button" disabled>▶ Мультфильм — скоро</button></div>
+  <p class="notes">Пока это пустые заглушки. Настоящие ссылки добавим позднее.</p>
+</dialog>
 <script src="supabase-config.js"></script>
 <script>
 (() => {
@@ -237,9 +331,151 @@
   document.getElementById('dismiss-registration-notice').addEventListener('click', () => {
     menuRegistrationNotice.hidden = true;
   });
+  let loggedInId = '';
+  let currentScreen = '0';
+  // Одна справка для всех существующих страниц; содержание зависит от экрана.
+  const helpPages = {
+    '0': ['Приветственная страница','Знакомство с идеей «Цифрового государства» и его возможностями.','Прочитай вводный текст и нажми «Далее».','Откроется экран 1 — начальное меню.'],
+    '1': ['Начальное меню','Выбор между просмотром результатов, входом и регистрацией.','Нажми нужную кнопку. Регистрация создаёт тестового участника, вход открывает личное меню.','Откроется выбранный раздел.'],
+    '1-1': ['Проверка результатов','Здесь позже будет поиск опубликованных результатов по тегу.','Сейчас это заглушка: поиск и таблицы результатов ещё не подключены.','В будущем появится таблица найденного голосования.'],
+    '1-2': ['Вход в аккаунт','Вход зарегистрированного участника по 16-значному ID и паролю.','Введи тестовый ID и четырёхсимвольный пароль, нажми «Войти».','При успехе откроется экран 1.2.1, при ошибке появится уведомление.'],
+    '1-2-1': ['Главное меню участника','Навигация по функциям после подтверждённого входа.','Нажми «Поздороваться» для демонстрации QR-режима. Остальные разделы пока в разработке.','Здесь откроются страницы участника. «Выйти» завершает тестовый сеанс.'],
+    '1-2-1-1': ['Поздороваться','Способ начать знакомство двух участников, встретившихся лично. Это пока демонстрация интерфейса, не верификация.','При входе случайно включается показ QR или режим сканера (50/50). Можно переключить вручную. Для камеры нажми «Включить сканер».','Настоящий обмен приветствиями и запись в базу появятся позже. Сейчас считывание демонстрационного QR не подтверждает личности.'],
+    '1-3': ['Регистрация','Создание записи тестового участника в базе C1.','Введи по клеткам дату и время рождения (16 цифр), выбери М/Ж, введи пароль (4 символа: буквы и цифры), нажми «Зарегистрироваться».','При успехе вернёшься на экран 1. Если ID занят — измени последние цифры, не теряя заполнение.']
+  };
+  const helpDialog = document.getElementById('help-dialog');
+  const helpOpen = document.getElementById('help-open');
+  const helpClose = document.getElementById('help-close');
+  helpOpen.addEventListener('click', () => {
+    const detail = helpPages[currentScreen] || ['Помощь','Раздел приложения.','Изучи элементы страницы.','Описание будет добавлено позже.'];
+    document.getElementById('help-title').textContent = '? ' + detail[0];
+    document.getElementById('help-purpose').textContent = detail[1];
+    document.getElementById('help-how').textContent = detail[2];
+    document.getElementById('help-next').textContent = detail[3];
+    if (typeof helpDialog.showModal === 'function') helpDialog.showModal();
+    else helpDialog.setAttribute('open', '');
+  });
+  helpClose.addEventListener('click', () => helpDialog.close());
+  helpDialog.addEventListener('click', event => {
+    if (event.target === helpDialog) helpDialog.close();
+  });
+
+  // Приветствие: пока только локальная демонстрация QR и считывания.
+  const GREETING_DEMO_VALUE = 'DIGITAL-STATE-DEMO-GREETING-0.7';
+  let greetingMode = 'qr';
+  let cameraStream = null;
+  let scanRun = 0;
+  const greetVideo = document.getElementById('greet-video');
+  const greetCameraMark = document.getElementById('greet-camera-mark');
+  const greetStartScan = document.getElementById('greet-start-scan');
+  const greetResult = document.getElementById('greet-result');
+  const tg = () => window.Telegram?.WebApp;
+  function greetMessage(message, isSuccess=false) {
+    greetResult.textContent = message;
+    greetResult.classList.add('visible');
+    greetResult.classList.toggle('success', isSuccess);
+    greetResult.classList.toggle('error', !isSuccess);
+  }
+  function stopGreetingScanner() {
+    scanRun++;
+    if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+    greetVideo.pause();
+    greetVideo.srcObject = null;
+    greetVideo.hidden = true;
+    greetCameraMark.hidden = false;
+    greetStartScan.disabled = false;
+    greetStartScan.textContent = 'Включить сканер';
+    if (typeof tg()?.closeScanQrPopup === 'function') {
+      try { tg().closeScanQrPopup(); } catch { /* Telegram popup may be closed already */ }
+    }
+  }
+  function handleGreetingRead(value) {
+    stopGreetingScanner();
+    if (value.trim() === GREETING_DEMO_VALUE) {
+      greetMessage('✓ Демонстрационный QR-код считан! Это ещё не приветствие двух участников: аккаунты не связываются, запись в базу не создаётся.', true);
+    } else {
+      greetMessage('QR-код считан, но это не наш демонстрационный код. Реальные приветствия добавим позднее.');
+    }
+  }
+  function setGreetingMode(mode) {
+    stopGreetingScanner();
+    greetingMode = mode;
+    document.getElementById('greet-qr-mode').hidden = mode !== 'qr';
+    document.getElementById('greet-scan-mode').hidden = mode !== 'scan';
+    document.getElementById('greet-choose-qr').setAttribute('aria-pressed', String(mode === 'qr'));
+    document.getElementById('greet-choose-scan').setAttribute('aria-pressed', String(mode === 'scan'));
+    greetResult.classList.remove('visible');
+  }
+  document.getElementById('greet-choose-qr').addEventListener('click', () => setGreetingMode('qr'));
+  document.getElementById('greet-choose-scan').addEventListener('click', () => setGreetingMode('scan'));
+  async function startGreetingScanner() {
+    if (greetingMode !== 'scan') return;
+    greetResult.classList.remove('visible');
+    // Встроенный сканер Telegram доступен в поддерживающих его версиях Mini Apps.
+    if (typeof tg()?.showScanQrPopup === 'function') {
+      try {
+        tg().showScanQrPopup({ text: 'Наведите камеру на QR-код' }, value => {
+          if (typeof value === 'string' && value) { handleGreetingRead(value); return true; }
+          return false;
+        });
+        return;
+      } catch { /* Try browser camera fallback */ }
+    }
+    if (typeof window.BarcodeDetector !== 'function' || !navigator.mediaDevices?.getUserMedia) {
+      greetMessage('Автоматическое сканирование не поддерживается в этом браузере. В Telegram Mini App используем встроенный QR-сканер. Пока можно переключиться на показ QR.');
+      return;
+    }
+    const thisScan = ++scanRun;
+    greetStartScan.disabled = true;
+    greetStartScan.textContent = 'Запускаем камеру…';
+    try {
+      const detector = new window.BarcodeDetector({ formats: ['qr_code'] });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio:false, video: { facingMode:'environment' } });
+      if (thisScan !== scanRun || greetingMode !== 'scan' || currentScreen !== '1-2-1-1') {
+        stream.getTracks().forEach(t=>t.stop());
+        return;
+      }
+      cameraStream=stream;
+      greetVideo.srcObject=stream;
+      greetVideo.hidden=false;
+      greetCameraMark.hidden=true;
+      await greetVideo.play();
+      greetStartScan.disabled=false;
+      greetStartScan.textContent='Остановить сканер';
+      const loop = async () => {
+        if (thisScan !== scanRun || !cameraStream) return;
+        try {
+          const found=await detector.detect(greetVideo);
+          if (found?.length && found[0]?.rawValue) { handleGreetingRead(found[0].rawValue); return; }
+        } catch { /* Try next video frame */ }
+        if (thisScan === scanRun) setTimeout(loop, 350);
+      };
+      loop();
+    } catch {
+      if (thisScan === scanRun) {
+        stopGreetingScanner();
+        greetMessage('Не удалось открыть камеру. Проверь разрешение камеры в браузере или используй Telegram Mini App.');
+      }
+    }
+  }
+  greetStartScan.addEventListener('click', () => {
+    if (cameraStream) stopGreetingScanner();
+    else startGreetingScanner();
+  });
   function showScreen(screen){
+    if ((screen === '1-2-1' || screen === '1-2-1-1') && !loggedInId) screen = '1-2';
+    if (currentScreen === '1-2-1-1') stopGreetingScanner();
+    currentScreen = screen;
     document.querySelectorAll('.screen').forEach(item=>item.classList.toggle('active',item.id==='screen-'+screen));
     window.scrollTo({top:0,behavior:'instant'});
+    if (screen === '1-2-1-1') {
+      // Независимый честный 50/50 при каждом новом открытии раздела.
+      const choice = new Uint8Array(1);
+      if (window.crypto?.getRandomValues) window.crypto.getRandomValues(choice);
+      else choice[0] = Math.floor(Math.random() * 256);
+      setGreetingMode((choice[0] & 1) === 0 ? 'qr' : 'scan');
+    }
     if (screen === '1-3') {
       menuRegistrationNotice.hidden = true;
       // Старые сообщения не должны мешать новой попытке регистрации.
@@ -345,6 +581,80 @@
       registerSubmit.disabled = false;
       registerSubmit.textContent = 'Зарегистрироваться';
     }
+  });
+  // Тестовый вход. Сеанс хранится только в HttpOnly-cookie локального сервера.
+  const loginForm = document.getElementById('login-form');
+  const loginSubmit = document.getElementById('login-submit');
+  const loginResult = document.getElementById('login-result');
+  const loginIdField = document.getElementById('login-id');
+  const loginPasswordField = document.getElementById('login-password');
+  const showLoginError = message => {
+    loginResult.textContent = message;
+    loginResult.classList.add('visible','error');
+    loginResult.classList.remove('success');
+  };
+  loginForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (loginSubmit.disabled) return;
+    const user_id = loginIdField.value.trim();
+    const password = loginPasswordField.value.toLowerCase();
+    if (!/^[0-9]{16}$/.test(user_id)) return showLoginError('Укажи ID из 16 цифр.');
+    if (!/^[a-z0-9]{4}$/.test(password)) return showLoginError('Укажи пароль из 4 латинских букв/цифр.');
+    if (location.hostname !== '127.0.0.1' || location.port !== '8765' || location.protocol !== 'http:') {
+      return showLoginError('Тестовый вход доступен только через start-site.cmd.');
+    }
+    loginSubmit.disabled = true;
+    loginSubmit.textContent = 'Проверяем…';
+    loginResult.classList.remove('visible');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+    try {
+      const response = await fetch('/api/login', {
+        method:'POST', cache:'no-store', credentials:'same-origin', signal:controller.signal,
+        headers:{'Content-Type':'application/json','X-C1-Local-Request':'1'},
+        body:JSON.stringify({user_id,password})
+      });
+      const answer = await response.json().catch(()=>null);
+      if (!response.ok || answer?.authenticated !== true) {
+        if (response.status === 429) showLoginError('Слишком много попыток. Подожди и попробуй позже.');
+        else showLoginError(answer?.message || 'Неверный ID или пароль.');
+        return;
+      }
+      // Подтверждаем, что сервер установил действующий сеанс, не доверяем одному ответу входа.
+      const check = await fetch('/api/session',{cache:'no-store',credentials:'same-origin'});
+      const session = await check.json().catch(()=>null);
+      if (!check.ok || session?.authenticated !== true || session.user_id !== user_id) {
+        showLoginError('Не удалось подтвердить сеанс. Проверь локальный сервер.');
+        return;
+      }
+      loggedInId = user_id;
+      document.getElementById('account-id-text').textContent = 'Твой ID: ' + user_id;
+      loginPasswordField.value = '';
+      loginIdField.value = '';
+      loginResult.classList.remove('visible');
+      showScreen('1-2-1');
+    } catch (error) {
+      showLoginError(error.name === 'AbortError' ? 'Время ожидания сервера истекло.' : 'Нет связи с локальным сервером.');
+    } finally {
+      clearTimeout(timeout);
+      loginSubmit.disabled = false;
+      loginSubmit.textContent = 'Войти';
+    }
+  });
+  document.querySelectorAll('[data-main-placeholder]').forEach(button=>button.addEventListener('click',()=>{
+    const box = document.getElementById('main-placeholder-result');
+    box.textContent = 'Раздел «' + button.dataset.mainPlaceholder + '» подключим позже.';
+    box.classList.add('visible');
+  }));
+  document.getElementById('logout-test').addEventListener('click',async()=>{
+    try {
+      await fetch('/api/logout',{method:'POST',cache:'no-store',credentials:'same-origin',
+        headers:{'Content-Type':'application/json','X-C1-Local-Request':'1'},body:'{}'});
+    } catch { /* Even on network error, hide the test menu locally. */ }
+    loggedInId = '';
+    document.getElementById('account-id-text').textContent = '';
+    document.getElementById('main-placeholder-result').classList.remove('visible');
+    showScreen('1');
   });
   updatePreview();
 })();
